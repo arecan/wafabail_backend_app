@@ -1,0 +1,4 @@
+Bundle-Name: publicationsRest
+Bundle-SymbolicName: publicationsrest
+Bundle-Version: 1.0.0
+Liferay-Configuration-Path: /configuration
