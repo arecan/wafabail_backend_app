@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="article.model.Article">
+		<field name="uuid" type="String" />
+		<field name="articleId" type="long" />
+		<field name="titre" type="String" />
+		<field name="detail" type="String" />
+		<field name="dateCreation" type="Date" />
+	</model>
+</model-hints>

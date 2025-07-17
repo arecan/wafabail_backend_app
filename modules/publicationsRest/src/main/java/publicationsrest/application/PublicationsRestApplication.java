@@ -53,31 +53,6 @@ public class PublicationsRestApplication extends Application {
 		return "Good morning!";
 	}
 
-	@GET
-	@Path("/by-folder-id/{siteId}/{folderId}")
-	@Produces("application/json")
-	public Response getPublicationsByFolderId(
-			@PathParam("siteId") long siteId,
-			@PathParam("folderId") long folderId
-	) {
-		try {
-			List<FileEntry> fileEntries = DLAppServiceUtil.getFileEntries(siteId, folderId);
-
-			List<Map<String, Object>> publications = fileEntries.stream().map(file -> {
-				Map<String, Object> data = new HashMap<>();
-				data.put("title", file.getTitle());
-				data.put("url", "/documents/" + file.getGroupId() + "/" + file.getFolderId() + "/" + file.getTitle() + "/" + file.getUuid());
-				return data;
-			}).collect(Collectors.toList());
-
-			return Response.ok(publications).build();
-
-		} catch (Exception e) {
-			return Response.status(Response.Status.NOT_FOUND)
-					.entity("Dossier non trouvé: " + folderId)
-					.build();
-		}
-	}
 
 /*	@Context
 	private HttpServletRequest request;
@@ -136,7 +111,7 @@ public class PublicationsRestApplication extends Application {
 			return Response.serverError().build();
 		}
 
-		return Response.ok(categorizedPublications).build(); 
+		return Response.ok(categorizedPublications).build();
 	}
 
 }

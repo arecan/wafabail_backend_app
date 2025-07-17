@@ -1,0 +1,1 @@
+create index IX_B9800030 on WAFABAIL_Article (uuid_[$COLUMN_LENGTH:75$]);

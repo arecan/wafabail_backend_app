@@ -1,0 +1,26 @@
+.article-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.article-table th,
+.article-table td {
+  border: 1px solid #ccc;
+  padding: 12px 15px;
+  text-align: left;
+}
+
+.article-table thead {
+  background-color: #007bff;
+  color: white;
+}
+
+.article-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.article-table tr:hover {
+  background-color: #eef;
+}

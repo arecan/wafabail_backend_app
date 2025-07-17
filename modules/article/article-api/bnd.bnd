@@ -1,0 +1,10 @@
+Bundle-Name: article-api
+Bundle-SymbolicName: article.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	article.exception,\
+	article.model,\
+	article.service,\
+	article.service.persistence
+-check: EXPORTS
+-includeresource: META-INF/service.xml=../article-service/service.xml
