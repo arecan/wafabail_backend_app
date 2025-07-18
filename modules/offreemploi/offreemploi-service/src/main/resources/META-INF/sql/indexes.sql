@@ -1,0 +1,1 @@
+create index IX_894CE886 on WAFABAIL_Offreemploi (uuid_[$COLUMN_LENGTH:75$]);

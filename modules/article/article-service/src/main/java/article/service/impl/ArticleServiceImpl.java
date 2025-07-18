@@ -5,21 +5,19 @@
 
 package article.service.impl;
 
+
+
 import article.service.base.ArticleServiceBaseImpl;
-
 import com.liferay.portal.aop.AopService;
-
 import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Brian Wing Shun Chan
  */
 @Component(
-	property = {
-		"json.web.service.context.name=wafabail",
-		"json.web.service.context.path=Article"
-	},
-	service = AopService.class
+		property = "model.class.name=article.model.Article",
+		service = AopService.class
 )
 public class ArticleServiceImpl extends ArticleServiceBaseImpl {
+
 }

@@ -1,0 +1,1 @@
+create index IX_A8D6D53 on WAFABAIL_Revue (uuid_[$COLUMN_LENGTH:75$]);

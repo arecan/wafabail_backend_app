@@ -24,16 +24,6 @@ public class ArticleServiceUtil {
 	 *
 	 * Never modify this class directly. Add custom service methods to <code>article.service.impl.ArticleServiceImpl</code> and rerun ServiceBuilder to regenerate this class.
 	 */
-
-	/**
-	 * Returns the OSGi service identifier.
-	 *
-	 * @return the OSGi service identifier
-	 */
-	public static java.lang.String getOSGiServiceIdentifier() {
-		return getService().getOSGiServiceIdentifier();
-	}
-
 	public static ArticleService getService() {
 		return _service;
 	}

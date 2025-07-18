@@ -1,0 +1,1 @@
+create index IX_A3B1161A on WAFABAIL_Offrestage (uuid_[$COLUMN_LENGTH:75$]);

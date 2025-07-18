@@ -25,16 +25,6 @@ public class ArticleServiceWrapper
 		_articleService = articleService;
 	}
 
-	/**
-	 * Returns the OSGi service identifier.
-	 *
-	 * @return the OSGi service identifier
-	 */
-	@Override
-	public String getOSGiServiceIdentifier() {
-		return _articleService.getOSGiServiceIdentifier();
-	}
-
 	@Override
 	public ArticleService getWrappedService() {
 		return _articleService;

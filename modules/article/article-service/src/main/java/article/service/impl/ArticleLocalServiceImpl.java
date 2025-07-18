@@ -102,6 +102,26 @@ public class ArticleLocalServiceImpl extends ArticleLocalServiceBaseImpl {
 		}
 	}
 
+	public Article deleteArticle(long articleId) throws PortalException {
+		try {
+			Article article = articlePersistence.findByPrimaryKey(articleId);
+
+			if (article == null) {
+				throw new PortalException("Article introuvable avec l'ID: " + articleId);
+			}
+
+			article = articlePersistence.remove(article);
+
+			_log.info("Article supprimé avec l'ID: " + articleId);
+
+			return article;
+		} catch (Exception e) {
+			_log.error("Erreur lors de la suppression de l'article avec l'ID: " + articleId, e);
+			throw new PortalException("Impossible de supprimer l'article avec l'ID: " + articleId, e);
+		}
+	}
+
+
 
 
 }

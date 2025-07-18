@@ -1,0 +1,4 @@
+Bundle-Name: offreemploiRest
+Bundle-SymbolicName: offreemploirest
+Bundle-Version: 1.0.0
+Liferay-Configuration-Path: /configuration

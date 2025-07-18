@@ -1,0 +1,10 @@
+Bundle-Name: revue-api
+Bundle-SymbolicName: revue.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	revue.exception,\
+	revue.model,\
+	revue.service,\
+	revue.service.persistence
+-check: EXPORTS
+-includeresource: META-INF/service.xml=../revue-service/service.xml

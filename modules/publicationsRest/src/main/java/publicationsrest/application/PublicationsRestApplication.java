@@ -1,24 +1,21 @@
 package publicationsrest.application;
 
-import java.util.*;
-import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.*;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.Application;
-import javax.ws.rs.core.Context;
+
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.liferay.document.library.kernel.model.DLFolder;
 
 import com.liferay.document.library.kernel.service.DLAppServiceUtil;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.Folder;
-import com.liferay.portal.kernel.theme.ThemeDisplay;
-import com.liferay.portal.kernel.util.WebKeys;
+
 import dto.ArticleDto;
 import dto.PublicationDto;
 import org.osgi.service.component.annotations.Component;
@@ -110,6 +107,7 @@ public class PublicationsRestApplication extends Application {
 
 					publications.add(new PublicationDto(title, url));
 				}
+
 
 				categorizedPublications.put(subFolderName, publications);
 			}

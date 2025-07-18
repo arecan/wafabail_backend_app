@@ -1,0 +1,11 @@
+dependencies {
+	api project(":modules:offreemploi:offreemploi-api")
+
+	compileOnly group: "com.liferay.portal", name: "release.dxp.api"
+}
+
+buildService {
+	apiDir = "../offreemploi-api/src/main/java"
+}
+
+group = "offreemploi"

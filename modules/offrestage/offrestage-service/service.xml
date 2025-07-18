@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 7.4.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_7_4_0.dtd">
+
+<service-builder dependency-injector="ds" package-path="offrestage">
+	<namespace>WAFABAIL</namespace>
+	<entity local-service="true" name="Offrestage" remote-service="true" uuid="true">
+		<column name="stageId" primary="true" type="long" />
+		<column name="titre" type="String" />
+		<column name="detail" type="String" />
+		<column name="dateCreation" type="Date" />
+	</entity>
+</service-builder>

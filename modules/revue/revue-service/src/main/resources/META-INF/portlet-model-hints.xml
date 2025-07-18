@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="revue.model.Revue">
+		<field name="uuid" type="String" />
+		<field name="revueId" type="long" />
+		<field name="titre" type="String" />
+		<field name="details" type="String" />
+		<field name="lien" type="String" />
+		<field name="dateCreation" type="Date" />
+	</model>
+</model-hints>

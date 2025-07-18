@@ -1,0 +1,11 @@
+dependencies {
+	api project(":modules:revue:revue-api")
+
+	compileOnly group: "com.liferay.portal", name: "release.dxp.api"
+}
+
+buildService {
+	apiDir = "../revue-api/src/main/java"
+}
+
+group = "revue"

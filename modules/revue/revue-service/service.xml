@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 7.4.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_7_4_0.dtd">
+
+<service-builder dependency-injector="ds" package-path="revue">
+	<namespace>WAFABAIL</namespace>
+	<entity local-service="true" name="Revue" remote-service="true" uuid="true">
+		<column name="revueId" primary="true" type="long" />
+		<column name="titre" type="String" />
+		<column name="details" type="String" />
+		<column name="lien" type="String" />
+		<column name="dateCreation" type="Date" />
+	</entity>
+</service-builder>

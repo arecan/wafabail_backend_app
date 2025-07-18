@@ -1,0 +1,11 @@
+dependencies {
+	api project(":modules:offrestage:offrestage-api")
+
+	compileOnly group: "com.liferay.portal", name: "release.dxp.api"
+}
+
+buildService {
+	apiDir = "../offrestage-api/src/main/java"
+}
+
+group = "offrestage"
