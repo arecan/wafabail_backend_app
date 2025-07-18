@@ -14,13 +14,17 @@ import com.liferay.document.library.kernel.model.DLFolder;
 
 import com.liferay.document.library.kernel.service.DLAppServiceUtil;
 
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.WebKeys;
+import dto.ArticleDto;
 import dto.PublicationDto;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants;
+import services.ArticleService;
 
 
 /**
@@ -28,7 +32,7 @@ import org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants;
  */
 @Component(
 	property = {
-		JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE + "=/publications",
+		JaxrsWhiteboardConstants.JAX_RS_APPLICATION_BASE + "=/wafabail",
 		JaxrsWhiteboardConstants.JAX_RS_NAME + "=publications.Rest"
 	},
 	service = Application.class
@@ -52,6 +56,10 @@ public class PublicationsRestApplication extends Application {
 	public String hello() {
 		return "Good morning!";
 	}
+
+	@Reference
+	private ArticleService articleService;
+
 
 
 /*	@Context
@@ -113,5 +121,44 @@ public class PublicationsRestApplication extends Application {
 
 		return Response.ok(categorizedPublications).build();
 	}
+
+	@GET
+	@Path("/articles/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getArticle(@PathParam("id") long articleId) {
+		try {
+			ArticleDto article = articleService.getArticle(articleId);
+			return Response.ok(article).build();
+		} catch (PortalException e) {
+			return Response.status(Response.Status.NOT_FOUND).entity("Article non trouvé").build();
+		}
+	}
+
+	@GET
+	@Path("/articles")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAllArticles() {
+		try {
+			List<ArticleDto> articles = articleService.getAllArticles();
+			return Response.ok(articles).build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.serverError().build();
+		}
+	}
+	@GET
+	@Path("/articles/paginated")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getPaginatedArticles(@QueryParam("start") @DefaultValue("0") int start,
+										 @QueryParam("end") @DefaultValue("10") int end) {
+		try {
+			List<ArticleDto> articles = articleService.getArticles(start, end);
+			return Response.ok(articles).build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.serverError().build();
+		}
+	}
+
 
 }
