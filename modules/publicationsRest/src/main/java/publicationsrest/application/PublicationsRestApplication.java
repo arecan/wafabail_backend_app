@@ -70,7 +70,7 @@ public class PublicationsRestApplication extends Application {
 		return 0L;
 	}*/
 
-	@GET
+	/*@GET
 	@Path("/getPublications")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -121,7 +121,65 @@ public class PublicationsRestApplication extends Application {
 		}
 
 		return Response.ok(categorizedPublications).build();
+	}*/
+	@GET
+	@Path("/getPublications")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getPublications() {
+		Map<String, List<PublicationDto>> categorizedPublications = new LinkedHashMap<>();
+
+		long groupId = 20119;
+		long repositoryId = groupId;
+		long parentFolderId = 0;
+
+		String mainFolderName = "wafabailPublication";
+		String[] subFolders = { "Publications Financieres", "Rapports Annuels", "Autres rapports" };
+
+		try {
+			Folder mainFolder = DLAppServiceUtil.getFolder(repositoryId, parentFolderId, mainFolderName);
+			long mainFolderId = mainFolder.getFolderId();
+
+			for (String subFolderName : subFolders) {
+				List<PublicationDto> publications = new ArrayList<>();
+
+				// Récupérer le dossier de la catégorie
+				Folder subFolder = DLAppServiceUtil.getFolder(repositoryId, mainFolderId, subFolderName);
+				long subFolderId = subFolder.getFolderId();
+
+				// Récupérer les dossiers d'années
+				List<Folder> yearFolders = new ArrayList<>(DLAppServiceUtil.getFolders(repositoryId, subFolderId));
+				yearFolders.sort((f1, f2) -> f2.getName().compareTo(f1.getName())); // Trie décroissant par année
+
+				for (Folder yearFolder : yearFolders) {
+					long yearFolderId = yearFolder.getFolderId();
+
+					// Récupérer les fichiers de cette année
+					List<FileEntry> files = new ArrayList<>(DLAppServiceUtil.getFileEntries(groupId, yearFolderId, -1, -1));
+
+					// Trier les fichiers par date de création décroissante
+					files.sort(Comparator.comparing(FileEntry::getCreateDate).reversed());
+
+					for (FileEntry file : files) {
+						String title = file.getTitle();
+						String url = "/documents/" + groupId + "/" + yearFolderId + "/" +
+								file.getFileName() + "/" + file.getUuid() + "?version=1.0";
+
+						publications.add(new PublicationDto(title, url));
+					}
+				}
+
+				categorizedPublications.put(subFolderName, publications);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.serverError().build();
+		}
+
+		return Response.ok(categorizedPublications).build();
 	}
+
 
 
 
