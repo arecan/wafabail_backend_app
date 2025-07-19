@@ -1,16 +1,16 @@
-package revue.app.portlet;
+package offrestage.app.portlet;
 
 import com.liferay.portal.kernel.util.ParamUtil;
-import org.osgi.service.component.annotations.Reference;
-import revue.app.constants.RevueAppPortletKeys;
+import offrestage.app.constants.OffrestageAppPortletKeys;
 
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 
 import javax.portlet.*;
 
+import offrestage.model.Offrestage;
+import offrestage.service.OffrestageLocalService;
 import org.osgi.service.component.annotations.Component;
-import revue.model.Revue;
-import revue.service.RevueLocalService;
+import org.osgi.service.component.annotations.Reference;
 
 import java.io.IOException;
 import java.util.List;
@@ -23,24 +23,25 @@ import java.util.List;
 		"com.liferay.portlet.display-category=category.sample",
 		"com.liferay.portlet.header-portlet-css=/css/main.css",
 		"com.liferay.portlet.instanceable=true",
-		"javax.portlet.display-name=RevueApp",
+		"javax.portlet.display-name=OffrestageApp",
 		"javax.portlet.init-param.template-path=/",
 		"javax.portlet.init-param.view-template=/view.jsp",
-		"javax.portlet.name=" + RevueAppPortletKeys.REVUEAPP,
+		"javax.portlet.name=" + OffrestageAppPortletKeys.OFFRESTAGEAPP,
 		"javax.portlet.resource-bundle=content.Language",
 		"javax.portlet.security-role-ref=power-user,user"
 	},
 	service = Portlet.class
 )
-public class RevueAppPortlet extends MVCPortlet {
+public class OffrestageAppPortlet extends MVCPortlet {
+
 	@Reference
-	private RevueLocalService revueLocalService;
+	private OffrestageLocalService offrestageLocalService;
 
 	@Override
 	public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
 			throws IOException, PortletException {
-		List<Revue> revues = revueLocalService.getRevues(-1, -1);
-		renderRequest.setAttribute("revues", revues);
+		List<Offrestage> stages = offrestageLocalService.getOffrestages(-1, -1);
+		renderRequest.setAttribute("offrestages", stages);
 		super.doView(renderRequest, renderResponse);
 	}
 
@@ -50,11 +51,10 @@ public class RevueAppPortlet extends MVCPortlet {
 
 	public void add(ActionRequest request, ActionResponse response) {
 		String titre = ParamUtil.getString(request, "titre");
-		String details = ParamUtil.getString(request, "details");
-		String lien = ParamUtil.getString(request, "lien");
+		String detail = ParamUtil.getString(request, "detail");
 
 		try {
-			revueLocalService.addRevue(titre, details, lien);
+			offrestageLocalService.addStage(titre,detail);
 			response.getRenderParameters().setValue("mvcPath", "/view.jsp");
 		} catch (Exception e) {
 			response.getRenderParameters().setValue("mvcPath", "/add.jsp");
@@ -63,38 +63,35 @@ public class RevueAppPortlet extends MVCPortlet {
 	}
 
 	public void display(ActionRequest request, ActionResponse response) throws Exception {
-		long revueId = ParamUtil.getLong(request, "revueId");
-		if (revueId > 0) {
-			Revue revue = revueLocalService.getRevue(revueId);
-			request.setAttribute("revue", revue);
-			response.getRenderParameters().setValue("mvcPath", "/display.jsp");
-		}
+		long stageId = ParamUtil.getLong(request, "stageId");
+		Offrestage stage = offrestageLocalService.getStage(stageId);
+		request.setAttribute("offrestage", stage);
+		response.getRenderParameters().setValue("mvcPath", "/display.jsp");
 	}
 
 	public void delete(ActionRequest request, ActionResponse response) throws Exception {
-		long revueId = ParamUtil.getLong(request, "revueId");
-		revueLocalService.deleteRevue(revueId);
+		long stageId = ParamUtil.getLong(request, "stageId");
+		offrestageLocalService.deleteOffrestage(stageId);
 		response.getRenderParameters().setValue("mvcPath", "/view.jsp");
 	}
 
 	public void navigateToEditPage(ActionRequest request, ActionResponse response) throws Exception {
-		long revueId = ParamUtil.getLong(request, "revueId");
-		Revue revue = revueLocalService.getRevue(revueId);
-		request.setAttribute("revue", revue);
+		long stageId = ParamUtil.getLong(request, "stageId");
+		Offrestage stage = offrestageLocalService.getStage(stageId);
+		request.setAttribute("offrestage", stage);
 		response.getRenderParameters().setValue("mvcPath", "/update.jsp");
 	}
 
 	public void update(ActionRequest request, ActionResponse response) throws Exception {
-		long revueId = ParamUtil.getLong(request, "revueId");
+		long stageId = ParamUtil.getLong(request, "stageId");
 		String titre = ParamUtil.getString(request, "titre");
-		String details = ParamUtil.getString(request, "details");
-		String lien = ParamUtil.getString(request, "lien");
+		String detail = ParamUtil.getString(request, "detail");
 
 		try {
-			revueLocalService.updateRevue(revueId, titre, details, lien);
+			offrestageLocalService.updateStage(stageId,titre,detail);
 			response.getRenderParameters().setValue("mvcPath", "/view.jsp");
 		} catch (Exception e) {
-			request.setAttribute("revue", revueLocalService.getRevue(revueId));
+			request.setAttribute("offrestage", offrestageLocalService.getOffrestage(stageId));
 			response.getRenderParameters().setValue("mvcPath", "/update.jsp");
 		}
 		response.setRenderParameter("mvcPath", "/view.jsp");

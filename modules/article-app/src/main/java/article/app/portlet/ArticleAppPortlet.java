@@ -4,6 +4,7 @@ import article.app.constants.ArticleAppPortletKeys;
 
 import article.model.Article;
 import article.service.ArticleLocalService;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
@@ -41,59 +42,78 @@ public class ArticleAppPortlet extends MVCPortlet {
 	@Reference
 	ArticleLocalService articleLocalService;
 
-	private static final Log _log = LogFactoryUtil.getLog(ArticleAppPortlet.class);
-
 	@Override
-	public void doView(RenderRequest renderRequest, RenderResponse renderResponse) throws IOException, PortletException {
+	public void doView(RenderRequest renderRequest, RenderResponse renderResponse)
+			throws IOException, PortletException {
 
-		try {
-			List<Article> articles = articleLocalService.getAllArticles();
+		List<Article> articles = articleLocalService.getAllArticles();
+		renderRequest.setAttribute("articles", articles);
 
-			renderRequest.setAttribute("articles", articles);
-
-		} catch (Exception e) {
-			_log.error("Erreur lors du chargement des articles dans la vue", e);
-		}
 		super.doView(renderRequest, renderResponse);
 	}
 
-	@ProcessAction(name = "addArticle")
-	public void addArticle(ActionRequest actionRequest, ActionResponse actionResponse) {
+	public void navigateToAddPage(ActionRequest request, ActionResponse response) {
+		response.getRenderParameters().setValue("mvcPath", "/add.jsp");
+	}
 
-		String titre = ParamUtil.getString(actionRequest, "titre");
-		String detail = ParamUtil.getString(actionRequest, "detail");
+	public void add(ActionRequest request, ActionResponse response) {
+		String titre = ParamUtil.getString(request, "titre");
+		String detail = ParamUtil.getString(request, "detail");
 
 		try {
 			articleLocalService.addArticle(titre, detail);
-			SessionMessages.add(actionRequest, "articleAddedSuccessfully");
-
-			_log.info("Article ajouté avec succès.");
-
+			response.getRenderParameters().setValue("mvcPath", "/view.jsp");
 		} catch (Exception e) {
-			_log.error("Erreur lors de l'ajout de l'article", e);
-			SessionErrors.add(actionRequest, "errorAddingArticle");
+			// Gestion erreur
+			response.getRenderParameters().setValue("mvcPath", "/add.jsp");
 		}
 	}
 
-	@ProcessAction(name = "updateArticle")
-	public void updateArticle(ActionRequest actionRequest, ActionResponse actionResponse) {
+	public void display(ActionRequest request, ActionResponse response) throws PortalException {
+		long articleId = ParamUtil.getLong(request, "articleId", 0L);
 
-		long articleId = ParamUtil.getLong(actionRequest, "articleId");
-		String titre = ParamUtil.getString(actionRequest, "titre");
-		String detail = ParamUtil.getString(actionRequest, "detail");
-
-		try {
-			articleLocalService.updateArticle(articleId, titre, detail);
-			SessionMessages.add(actionRequest, "articleUpdatedSuccessfully");
-
-		} catch (Exception e) {
-			_log.error("Erreur lors de la mise à jour de l'article", e);
-			SessionErrors.add(actionRequest, "errorUpdatingArticle");
+		if (articleId != 0L) {
+			Article article = articleLocalService.getArticle(articleId);
+			request.setAttribute("article", article);
+			response.getRenderParameters().setValue("mvcPath", "/display.jsp");
 		}
 	}
 
+	public void delete(ActionRequest request, ActionResponse response) throws PortalException {
+		long articleId = ParamUtil.getLong(request, "articleId", 0L);
 
+		if (articleId != 0L) {
+			articleLocalService.deleteArticle(articleId);
+			response.getRenderParameters().setValue("mvcPath", "/view.jsp");
+		}
+	}
 
+	public void navigateToEditPage(ActionRequest request, ActionResponse response) throws PortalException {
+		long articleId = ParamUtil.getLong(request, "articleId", 0L);
+
+		if (articleId != 0L) {
+			Article article = articleLocalService.getArticle(articleId);
+			request.setAttribute("article", article);
+			response.getRenderParameters().setValue("mvcPath", "/update.jsp");
+		}
+	}
+
+	public void update(ActionRequest request, ActionResponse response) throws PortalException {
+		long articleId = ParamUtil.getLong(request, "articleId", 0L);
+		String titre = ParamUtil.getString(request, "titre");
+		String detail = ParamUtil.getString(request, "detail");
+
+		if (articleId > 0) {
+			try {
+				articleLocalService.updateArticle(articleId, titre, detail);
+				response.getRenderParameters().setValue("mvcPath", "/view.jsp");
+			} catch (Exception e) {
+				request.setAttribute("article", articleLocalService.getArticle(articleId));
+				response.getRenderParameters().setValue("mvcPath", "/update.jsp");
+			}
+		}
+		response.setRenderParameter("mvcPath", "/view.jsp");
+	}
 
 
 }
