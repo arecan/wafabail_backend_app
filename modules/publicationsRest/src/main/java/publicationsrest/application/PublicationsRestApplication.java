@@ -75,40 +75,43 @@ public class PublicationsRestApplication extends Application {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getPublications() {
-		Map<String, List<PublicationDto>> categorizedPublications = new HashMap<>();
-
+		Map<String, List<PublicationDto>> categorizedPublications = new LinkedHashMap<>();
 
 		long groupId = 20119;
 		long repositoryId = groupId;
 		long parentFolderId = 0;
 
-		String mainFolderName = "wafabailPublication"; // dossier racine
+		String mainFolderName = "wafabailPublication";
 		String[] subFolders = { "Publications Financieres", "Rapports Annuels", "Autres rapports" };
 
 		try {
-			// Récupère le dossier principal
 			Folder mainFolder = DLAppServiceUtil.getFolder(repositoryId, parentFolderId, mainFolderName);
 			long mainFolderId = mainFolder.getFolderId();
 
 			for (String subFolderName : subFolders) {
 				List<PublicationDto> publications = new ArrayList<>();
 
-				// Récupère chaque sous-dossier
 				Folder subFolder = DLAppServiceUtil.getFolder(repositoryId, mainFolderId, subFolderName);
 				long subFolderId = subFolder.getFolderId();
 
-				// Récupère les fichiers du sous-dossier
-				List<FileEntry> files = DLAppServiceUtil.getFileEntries(groupId, subFolderId, -1, -1);
+				List<Folder> yearFolders = new ArrayList<>(DLAppServiceUtil.getFolders(repositoryId, subFolderId));
+				yearFolders.sort((f1, f2) -> f2.getName().compareTo(f1.getName()));
 
-				for (FileEntry file : files) {
-					String title = file.getTitle();
-					String url = "/documents/" + groupId + "/" + subFolderId + "/" +
-							file.getFileName() + "/" + file.getUuid() + "?version=1.0";
+				for (Folder yearFolder : yearFolders) {
+					long yearFolderId = yearFolder.getFolderId();
 
-					publications.add(new PublicationDto(title, url));
+					List<FileEntry> files = DLAppServiceUtil.getFileEntries(groupId, yearFolderId, -1, -1);
+
+					for (FileEntry file : files) {
+						String title = file.getTitle();
+						String url = "/documents/" + groupId + "/" + yearFolderId + "/" +
+								file.getFileName() + "/" + file.getUuid() + "?version=1.0";
+
+						publications.add(new PublicationDto(title, url));
+					}
 				}
 
-
+				// Ajouter la liste même si elle est vide
 				categorizedPublications.put(subFolderName, publications);
 			}
 
@@ -119,6 +122,8 @@ public class PublicationsRestApplication extends Application {
 
 		return Response.ok(categorizedPublications).build();
 	}
+
+
 
 	@GET
 	@Path("/articles/{id}")
