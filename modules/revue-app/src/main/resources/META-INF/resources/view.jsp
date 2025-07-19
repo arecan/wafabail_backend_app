@@ -30,6 +30,9 @@
         liferay-ui:search-container-column-text name="Lien">
             <div class="truncate-3-lines">${r.lien}</div>
         </liferay-ui:search-container-column-text>
+         <liferay-ui:search-container-column-text name="Date de Création">
+            <div class="truncate-3-lines" pattern='yyyy-MM-dd'>${r.dateCreation}</div>
+         </liferay-ui:search-container-column-text>
 
         <liferay-ui:search-container-column-text name="Actions">
             <a href="<portlet:actionURL name='display'>

@@ -24,6 +24,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 
 import java.io.Serializable;
 
+import java.util.Date;
 import java.util.List;
 
 import org.osgi.annotation.versioning.ProviderType;
@@ -68,6 +69,9 @@ public interface RevueLocalService
 	public Revue addRevue(Revue revue);
 
 	public Revue addRevue(String titre, String details, String lien);
+
+	public Revue ajouterRevue(
+		String titre, String details, String lien, Date dateCreation);
 
 	/**
 	 * @throws PortalException
@@ -251,6 +255,11 @@ public interface RevueLocalService
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getRevuesCount();
+
+	public Revue modifierRevue(
+			long revueId, String titre, String details, String lien,
+			Date dateCreation)
+		throws PortalException;
 
 	public Revue updateRevue(
 			long revueId, String titre, String details, String lien)

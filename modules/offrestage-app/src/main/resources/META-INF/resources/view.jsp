@@ -27,6 +27,10 @@
             <div class="truncate-3-lines">${s.detail}</div>
         </liferay-ui:search-container-column-text>
 
+           <liferay-ui:search-container-column-text name="Date de Création">
+                    <div class="truncate-3-lines" pattern='yyyy-MM-dd'>${s.dateCreation}</div>
+                 </liferay-ui:search-container-column-text>
+
         <liferay-ui:search-container-column-text name="Actions">
             <a href="<portlet:actionURL name='display'>
                         <portlet:param name='stageId' value='${s.stageId}' />

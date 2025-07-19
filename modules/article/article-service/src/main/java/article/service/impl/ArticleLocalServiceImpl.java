@@ -46,6 +46,25 @@ public class ArticleLocalServiceImpl extends ArticleLocalServiceBaseImpl {
 			throw new RuntimeException("Impossible de créer le article", e);
 		}
 	}
+	public Article ajouterArticle(String titre,String detail,Date dateCreation) {
+		try {
+			long articleId = counterLocalService.increment(Article.class.getName());
+			Article article = articlePersistence.create(articleId);
+			article.setUuid(java.util.UUID.randomUUID().toString());
+			article.setTitre(titre);
+			article.setDetail(detail);
+			article.setDateCreation(dateCreation);
+			article = articlePersistence.update(article);
+
+			_log.info("Article créé avec l'ID: " + articleId);
+
+			return article;
+
+		} catch (Exception e) {
+			_log.error("Erreur lors de la création du article", e);
+			throw new RuntimeException("Impossible de créer le article", e);
+		}
+	}
 	public Article updateArticle(long articleId,String titre,String detail) throws PortalException {
 		try {
 			Article article = articlePersistence.findByPrimaryKey(articleId);
@@ -54,6 +73,23 @@ public class ArticleLocalServiceImpl extends ArticleLocalServiceBaseImpl {
 			}
 			article.setTitre(titre);
 			article.setDetail(detail);
+			article = articlePersistence.update(article);
+			_log.info("Article modifié avec l'ID: " + articleId);
+			return article;
+		} catch (Exception e) {
+			_log.error("Erreur lors de la modification du article avec l'ID: " + articleId, e);
+			throw new PortalException("Impossible de modifier le article avec l'ID: " + articleId, e);
+		}
+	}
+	public Article modifierArticle(long articleId,String titre,String detail,Date dateCreation) throws PortalException {
+		try {
+			Article article = articlePersistence.findByPrimaryKey(articleId);
+			if (article == null) {
+				throw new PortalException("Contrat introuvable avec l'ID: " + articleId);
+			}
+			article.setTitre(titre);
+			article.setDetail(detail);
+			article.setDateCreation(dateCreation);
 			article = articlePersistence.update(article);
 			_log.info("Article modifié avec l'ID: " + articleId);
 			return article;

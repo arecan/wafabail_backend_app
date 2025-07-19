@@ -13,6 +13,9 @@ import revue.model.Revue;
 import revue.service.RevueLocalService;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -61,6 +64,26 @@ public class RevueAppPortlet extends MVCPortlet {
 		}
 		response.setRenderParameter("mvcPath", "/view.jsp");
 	}
+	public void ajouter(ActionRequest request, ActionResponse response) {
+		String titre = ParamUtil.getString(request, "titre");
+		String details = ParamUtil.getString(request, "details");
+		String lien = ParamUtil.getString(request, "lien");
+		String dateStr = ParamUtil.getString(request, "dateCreation");
+		Date dateCreation = null;
+		try {
+			dateCreation = new SimpleDateFormat("yyyy-MM-dd").parse(dateStr);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			revueLocalService.ajouterRevue(titre, details, lien,dateCreation);
+			response.getRenderParameters().setValue("mvcPath", "/view.jsp");
+		} catch (Exception e) {
+			response.getRenderParameters().setValue("mvcPath", "/add.jsp");
+		}
+		response.setRenderParameter("mvcPath", "/view.jsp");
+	}
 
 	public void display(ActionRequest request, ActionResponse response) throws Exception {
 		long revueId = ParamUtil.getLong(request, "revueId");
@@ -92,6 +115,28 @@ public class RevueAppPortlet extends MVCPortlet {
 
 		try {
 			revueLocalService.updateRevue(revueId, titre, details, lien);
+			response.getRenderParameters().setValue("mvcPath", "/view.jsp");
+		} catch (Exception e) {
+			request.setAttribute("revue", revueLocalService.getRevue(revueId));
+			response.getRenderParameters().setValue("mvcPath", "/update.jsp");
+		}
+		response.setRenderParameter("mvcPath", "/view.jsp");
+	}
+	public void modifier(ActionRequest request, ActionResponse response) throws Exception {
+		long revueId = ParamUtil.getLong(request, "revueId");
+		String titre = ParamUtil.getString(request, "titre");
+		String details = ParamUtil.getString(request, "details");
+		String lien = ParamUtil.getString(request, "lien");
+		String dateStr = ParamUtil.getString(request, "dateCreation");
+		Date dateCreation = null;
+		try {
+			dateCreation = new SimpleDateFormat("yyyy-MM-dd").parse(dateStr);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			revueLocalService.modifierRevue(revueId, titre, details, lien,dateCreation);
 			response.getRenderParameters().setValue("mvcPath", "/view.jsp");
 		} catch (Exception e) {
 			request.setAttribute("revue", revueLocalService.getRevue(revueId));

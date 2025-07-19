@@ -50,6 +50,27 @@ public class RevueLocalServiceImpl extends RevueLocalServiceBaseImpl {
 			throw new RuntimeException("Impossible de créer la revue", e);
 		}
 	}
+	public Revue ajouterRevue(String titre, String details, String lien,Date dateCreation) {
+		try {
+			long revueId = counterLocalService.increment(Revue.class.getName());
+			Revue revue = revuePersistence.create(revueId);
+
+			revue.setUuid(UUID.randomUUID().toString());
+			revue.setTitre(titre);
+			revue.setDetails(details);
+			revue.setLien(lien);
+			revue.setDateCreation(dateCreation);
+
+			revue = revuePersistence.update(revue);
+
+			_log.info("Revue créée avec l'ID: " + revueId);
+
+			return revue;
+		} catch (Exception e) {
+			_log.error("Erreur lors de la création de la revue", e);
+			throw new RuntimeException("Impossible de créer la revue", e);
+		}
+	}
 
 	public Revue updateRevue(long revueId, String titre, String details, String lien) throws PortalException {
 		try {
@@ -73,6 +94,30 @@ public class RevueLocalServiceImpl extends RevueLocalServiceBaseImpl {
 			throw new PortalException("Impossible de modifier la revue avec l'ID: " + revueId, e);
 		}
 	}
+	public Revue modifierRevue(long revueId, String titre, String details, String lien,Date dateCreation) throws PortalException {
+		try {
+			Revue revue = revuePersistence.findByPrimaryKey(revueId);
+
+			if (revue == null) {
+				throw new PortalException("Revue introuvable avec l'ID: " + revueId);
+			}
+
+			revue.setTitre(titre);
+			revue.setDetails(details);
+			revue.setLien(lien);
+			revue.setDateCreation(dateCreation);
+
+			revue = revuePersistence.update(revue);
+
+			_log.info("Revue modifiée avec l'ID: " + revueId);
+
+			return revue;
+		} catch (Exception e) {
+			_log.error("Erreur lors de la mise à jour de la revue", e);
+			throw new PortalException("Impossible de modifier la revue avec l'ID: " + revueId, e);
+		}
+	}
+
 
 	public Revue getRevue(long revueId) throws PortalException {
 		try {

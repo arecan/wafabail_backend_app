@@ -46,6 +46,13 @@ public class ArticleLocalServiceWrapper
 		return _articleLocalService.addArticle(titre, detail);
 	}
 
+	@Override
+	public article.model.Article ajouterArticle(
+		String titre, String detail, java.util.Date dateCreation) {
+
+		return _articleLocalService.ajouterArticle(titre, detail, dateCreation);
+	}
+
 	/**
 	 * Creates a new article with the primary key. Does not add the article to the database.
 	 *
@@ -298,6 +305,16 @@ public class ArticleLocalServiceWrapper
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _articleLocalService.getPersistedModel(primaryKeyObj);
+	}
+
+	@Override
+	public article.model.Article modifierArticle(
+			long articleId, String titre, String detail,
+			java.util.Date dateCreation)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _articleLocalService.modifierArticle(
+			articleId, titre, detail, dateCreation);
 	}
 
 	/**

@@ -1,6 +1,6 @@
 <%@ include file="/init.jsp" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<portlet:actionURL name="update" var="updateURL" />
+<portlet:actionURL name="modifier" var="updateURL" />
  <aui:button class="btn btn-primary mb-3" type="cancel" value="Retour" onClick="history.back();" />
 
 <aui:form action="<%= updateURL %>" name="<portlet:namespace />fmArticle" method="post" id="articleForm">
@@ -20,6 +20,14 @@
           value="${article.detail}"
           rows="100"
       />
+     <aui:input
+         id="dateCreation"
+         name="dateCreation"
+         label="Date de création"
+         type="date"
+         value="${article.dateCreation}"
+     />
+
     </aui:fieldset>
 
     <aui:button-row>

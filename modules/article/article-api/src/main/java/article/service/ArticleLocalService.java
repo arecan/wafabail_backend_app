@@ -26,6 +26,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 
 import java.io.Serializable;
 
+import java.util.Date;
 import java.util.List;
 
 import org.osgi.annotation.versioning.ProviderType;
@@ -68,6 +69,9 @@ public interface ArticleLocalService
 	public Article addArticle(Article article);
 
 	public Article addArticle(String titre, String detail);
+
+	public Article ajouterArticle(
+		String titre, String detail, Date dateCreation);
 
 	/**
 	 * Creates a new article with the primary key. Does not add the article to the database.
@@ -247,6 +251,10 @@ public interface ArticleLocalService
 	@Override
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
+		throws PortalException;
+
+	public Article modifierArticle(
+			long articleId, String titre, String detail, Date dateCreation)
 		throws PortalException;
 
 	/**

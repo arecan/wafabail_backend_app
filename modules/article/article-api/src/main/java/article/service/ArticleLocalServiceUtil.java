@@ -55,6 +55,12 @@ public class ArticleLocalServiceUtil {
 		return getService().addArticle(titre, detail);
 	}
 
+	public static Article ajouterArticle(
+		String titre, String detail, java.util.Date dateCreation) {
+
+		return getService().ajouterArticle(titre, detail, dateCreation);
+	}
+
 	/**
 	 * Creates a new article with the primary key. Does not add the article to the database.
 	 *
@@ -271,6 +277,15 @@ public class ArticleLocalServiceUtil {
 		throws PortalException {
 
 		return getService().getPersistedModel(primaryKeyObj);
+	}
+
+	public static Article modifierArticle(
+			long articleId, String titre, String detail,
+			java.util.Date dateCreation)
+		throws PortalException {
+
+		return getService().modifierArticle(
+			articleId, titre, detail, dateCreation);
 	}
 
 	/**

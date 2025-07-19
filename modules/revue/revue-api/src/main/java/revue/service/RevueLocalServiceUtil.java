@@ -55,6 +55,13 @@ public class RevueLocalServiceUtil {
 		return getService().addRevue(titre, details, lien);
 	}
 
+	public static Revue ajouterRevue(
+		String titre, String details, String lien,
+		java.util.Date dateCreation) {
+
+		return getService().ajouterRevue(titre, details, lien, dateCreation);
+	}
+
 	/**
 	 * @throws PortalException
 	 */
@@ -275,6 +282,15 @@ public class RevueLocalServiceUtil {
 	 */
 	public static int getRevuesCount() {
 		return getService().getRevuesCount();
+	}
+
+	public static Revue modifierRevue(
+			long revueId, String titre, String details, String lien,
+			java.util.Date dateCreation)
+		throws PortalException {
+
+		return getService().modifierRevue(
+			revueId, titre, details, lien, dateCreation);
 	}
 
 	public static Revue updateRevue(

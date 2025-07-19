@@ -39,4 +39,11 @@ public interface ArticleService extends BaseService {
 	 * Never modify this interface directly. Add custom service methods to <code>article.service.impl.ArticleServiceImpl</code> and rerun ServiceBuilder to automatically copy the method declarations to this interface. Consume the article remote service via injection or a <code>org.osgi.util.tracker.ServiceTracker</code>. Use {@link ArticleServiceUtil} if injection and service tracking are not available.
 	 */
 
+	/**
+	 * Returns the OSGi service identifier.
+	 *
+	 * @return the OSGi service identifier
+	 */
+	public String getOSGiServiceIdentifier();
+
 }

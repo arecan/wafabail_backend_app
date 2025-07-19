@@ -29,4 +29,11 @@
         disabled="true"
         value="${revue.lien}"
     />
+       <aui:input
+               id="dateCreation"
+               name="dateCreation"
+               label="Date de création"
+               disabled="true"
+               value="${revue.dateCreation}"
+           />
 </aui:fieldset>

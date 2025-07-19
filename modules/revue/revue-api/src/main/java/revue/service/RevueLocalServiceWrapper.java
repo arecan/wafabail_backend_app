@@ -48,6 +48,15 @@ public class RevueLocalServiceWrapper
 		return _revueLocalService.addRevue(titre, details, lien);
 	}
 
+	@Override
+	public revue.model.Revue ajouterRevue(
+		String titre, String details, String lien,
+		java.util.Date dateCreation) {
+
+		return _revueLocalService.ajouterRevue(
+			titre, details, lien, dateCreation);
+	}
+
 	/**
 	 * @throws PortalException
 	 */
@@ -303,6 +312,16 @@ public class RevueLocalServiceWrapper
 	@Override
 	public int getRevuesCount() {
 		return _revueLocalService.getRevuesCount();
+	}
+
+	@Override
+	public revue.model.Revue modifierRevue(
+			long revueId, String titre, String details, String lien,
+			java.util.Date dateCreation)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _revueLocalService.modifierRevue(
+			revueId, titre, details, lien, dateCreation);
 	}
 
 	@Override

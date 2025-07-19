@@ -18,6 +18,9 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -68,6 +71,25 @@ public class ArticleAppPortlet extends MVCPortlet {
 			response.getRenderParameters().setValue("mvcPath", "/add.jsp");
 		}
 	}
+	public void ajouter(ActionRequest request, ActionResponse response) {
+		String titre = ParamUtil.getString(request, "titre");
+		String detail = ParamUtil.getString(request, "detail");
+		String dateStr = ParamUtil.getString(request, "dateCreation");
+		Date dateCreation = null;
+		try {
+			dateCreation = new SimpleDateFormat("yyyy-MM-dd").parse(dateStr);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			articleLocalService.ajouterArticle(titre, detail,dateCreation);
+			response.getRenderParameters().setValue("mvcPath", "/view.jsp");
+		} catch (Exception e) {
+			// Gestion erreur
+			response.getRenderParameters().setValue("mvcPath", "/add.jsp");
+		}
+	}
 
 	public void display(ActionRequest request, ActionResponse response) throws PortalException {
 		long articleId = ParamUtil.getLong(request, "articleId", 0L);
@@ -106,6 +128,29 @@ public class ArticleAppPortlet extends MVCPortlet {
 		if (articleId > 0) {
 			try {
 				articleLocalService.updateArticle(articleId, titre, detail);
+				response.getRenderParameters().setValue("mvcPath", "/view.jsp");
+			} catch (Exception e) {
+				request.setAttribute("article", articleLocalService.getArticle(articleId));
+				response.getRenderParameters().setValue("mvcPath", "/update.jsp");
+			}
+		}
+		response.setRenderParameter("mvcPath", "/view.jsp");
+	}
+	public void modifier(ActionRequest request, ActionResponse response) throws PortalException {
+		long articleId = ParamUtil.getLong(request, "articleId", 0L);
+		String titre = ParamUtil.getString(request, "titre");
+		String detail = ParamUtil.getString(request, "detail");
+		String dateStr = ParamUtil.getString(request, "dateCreation");
+		Date dateCreation = null;
+		try {
+			dateCreation = new SimpleDateFormat("yyyy-MM-dd").parse(dateStr);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		if (articleId > 0) {
+			try {
+				articleLocalService.modifierArticle(articleId, titre, detail,dateCreation);
 				response.getRenderParameters().setValue("mvcPath", "/view.jsp");
 			} catch (Exception e) {
 				request.setAttribute("article", articleLocalService.getArticle(articleId));

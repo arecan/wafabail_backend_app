@@ -1,4 +1,5 @@
 <%@ include file="/init.jsp" %>
+
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
  <aui:button class="btn btn-primary mb-3" type="cancel" value="Retour" onClick="history.back();" />
@@ -21,4 +22,12 @@
        value="${article.detail}"
        rows="100"
    />
+   <aui:input
+           id="dateCreation"
+           name="dateCreation"
+           label="Date de création"
+           disabled="true"
+           value="${article.dateCreation}"
+       />
+
 </aui:fieldset>
